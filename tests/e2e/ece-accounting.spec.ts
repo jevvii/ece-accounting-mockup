@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { AppState } from '../../src/domain/schema';
 import {
   dialog,
   expectToast,
@@ -379,6 +380,7 @@ test.describe('ECE Accounting Scope Amendment Suite', () => {
     // Navigate to Reports -> Trial balance
     await openDestination(page, 'Reports');
     await expect(page).toHaveURL(/#\/reports\/trial-balance$/);
+    await page.getByLabel('Reporting month').fill('2026-11');
 
     // Old Beginning / Transactions / Ending columns MUST be completely absent
     const tableThead = page.locator('.table-scroll table thead');
@@ -437,8 +439,32 @@ test.describe('ECE Accounting Scope Amendment Suite', () => {
     await expect(drillTable).toContainText('INV-0001');
     await expect(drillTable).toContainText('CN-0001');
     await expect(drillTable).toContainText('INV-0002');
-    await expect(drillTable.locator('a[href="#/billing/invoices"]').first()).toBeVisible();
-    await expect(drillTable.locator('a[href="#/billing/credit-notes"]').first()).toBeVisible();
+    // Source links identify the exact supported record, not a generic worklist.
+    // Credit notes have no detail page, so they open their exact posted journal.
+    const sourceTargets = await page.evaluate((key) => {
+      const state = JSON.parse(window.localStorage.getItem(key)!) as AppState;
+      const invoices = state.invoices.filter((invoice) =>
+        invoice.workspaceId === 'ws-a' && ['INV-0001', 'INV-0002'].includes(invoice.invoiceNo));
+      const credit = state.creditNotes.find((note) => note.workspaceId === 'ws-a' && note.creditNo === 'CN-0001')!;
+      const creditJournal = state.journals.find((journal) =>
+        journal.workspaceId === 'ws-a' && journal.sourceType === 'credit_note' && journal.sourceId === credit.id)!;
+      return {
+        invoices: invoices.map((invoice) => ({
+          number: invoice.invoiceNo,
+          href: `#/billing/invoices/${encodeURIComponent(invoice.id)}`,
+        })),
+        creditJournalHref: `#/other/journals/${encodeURIComponent(creditJournal.id)}`,
+      };
+    }, STORAGE_KEY);
+    expect(sourceTargets.invoices).toHaveLength(2);
+    for (const invoice of sourceTargets.invoices) {
+      const link = drillTable.getByRole('link', { name: invoice.number, exact: true });
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', invoice.href);
+    }
+    const creditLink = drillTable.getByRole('link', { name: 'CN-0001', exact: true });
+    await expect(creditLink).toBeVisible();
+    await expect(creditLink).toHaveAttribute('href', sourceTargets.creditJournalHref);
 
     // Verify totals in drilldown modal
     await expect(drillTable.locator('tfoot')).toContainText('Drill-Through Totals');
@@ -461,7 +487,7 @@ test.describe('ECE Accounting Scope Amendment Suite', () => {
       page.getByRole('button', { name: 'Export current report CSV' }).click(),
     ]);
 
-    expect(download.suggestedFilename()).toBe('ece-accounting-trial-balance-2026-11-30.csv');
+    expect(download.suggestedFilename()).toBe('ece-accounting-trial-balance-month-end-2026-11.csv');
     const downloadPath = await download.path();
     expect(downloadPath).not.toBeNull();
     const csvContent = fs.readFileSync(downloadPath!, 'utf-8');

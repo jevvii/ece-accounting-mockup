@@ -302,3 +302,10 @@ Source: `3df8b5eb6d304f69813135f319d83fb86f5a98b11e4b211bbf473565b72b5f30` over 
 Workflow: `.github/workflows/pages.yml`, assuming this directory's contents are the repository root. It runs full `npm run verify` on GitHub before publishing `dist/`; PRs verify without deployment. Node 24, locked install and Chromium/system-dependency installation are explicit. Deployment permissions are scoped to the deploy job. `scripts/checkpoint.mjs` now fingerprints the workflow and ignore rules too.
 
 No GitHub repository, Actions run or Pages URL has been created/observed. No current browser or benchmark acceptance is claimed. Follow [the deployment walkthrough](GITHUB-PAGES.md) for the user-side steps, then record real remote checks and the deployed-path smoke result.
+
+
+## PAGES02 — GitHub Actions failure follow-up
+
+Owner-provided CI output recorded 40/42 browser passes and two stale expectations: source links to generic lists, and Company B account inputs despite its inactive Accounting entitlement. Corrected `tests/e2e/ece-accounting.spec.ts` to assert both exact invoice IDs and the credit note's exact journal, fix November 2026 scope explicitly, and expect `ece-accounting-trial-balance-month-end-2026-11.csv`. Corrected `tests/e2e/numbering.spec.ts` to require B's accounting editor to remain hidden, inspect its A100/A131 summary, verify its entitled employee series 5000/5002, and return to A's GL0700/GL0860 state. Financial totals and all workflow checks remain intact.
+
+Source `19ddf37bfc571b79c483e0da3b1329ccc73a8ccb207df269dc3f1d280b76a265` over 107 files. Current `npm run verify`: strict TypeScript, 24 domain files / 169 tests and production build passed; overall exit 1 at local Playwright webServer startup. Evidence `artifacts/logs/pages02-verify.txt`; the before-edit focused attempt in `artifacts/logs/pages02-before.txt` was blocked at the same startup stage. No current browser, benchmark or live deployment pass is claimed. Remote read also fails because github.com cannot resolve here. Next: push and observe GitHub's full browser/deploy result.

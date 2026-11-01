@@ -335,3 +335,11 @@ ECE09–ECE11 evidence: `artifacts/logs/review-final-verify.txt` (TypeScript, 24
 - [x] Relative asset base; standalone oracle fixture; GitHub Actions workflow checks `npm run verify` before uploading only `dist/`; root and repository walkthroughs. No repository initialization or publishing performed.
 - [x] Current TypeScript, 24 domain files / 169 tests, and build passed; YAML/asset/fixture checks passed (`artifacts/logs/pages-preparation-results.json`, `artifacts/logs/pages-workflow-check.txt`).
 - [ ] Actual GitHub workflow run, deployed URL and hosted repository-path smoke checks. Follow `docs/GITHUB-PAGES.md`. ECE12 browser/benchmark acceptance remains pending.
+
+
+## PAGES02 — reported GitHub browser assertion failures
+
+- [x] Diagnose owner-provided 40/42 CI output: exact record/journal routes replaced generic list links, and inactive Company B Accounting hides account numbering inputs.
+- [x] Update both failing specs to assert current contracts, explicit November scope/current CSV filename, B's read-only account policy and active employee series, and A's saved series on return. Workflow and application permissions unchanged.
+- [x] Current TypeScript, 24 domain files / 169 tests and build passed; diff whitespace check passed. `artifacts/logs/pages02-verify.txt` records full verify exit 1 at local browser-server startup.
+- [ ] Push fix and observe all 42 Playwright tests plus deployment on GitHub. Remote DNS and local browser startup remain blocked here; no fresh browser pass claimed.

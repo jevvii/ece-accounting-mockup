@@ -54,8 +54,30 @@ test('company admin applies the master series to current accounts and new accoun
   await expect(page.getByRole('rowheader', { name: 'GL0700', exact: true })).toHaveCount(1);
   await useActor(page, ACTOR.bAdmin);
   await openTab(page, 'Numbering');
-  await expect(page.getByLabel('Prefix')).toHaveValue('A');
-  await expect(page.getByLabel('Starting number')).toHaveValue('100');
+  await expect(page.getByLabel('Record kind')).toHaveValue('account');
+  // Company B has standalone Payroll/Inventory; Accounting stays inactive.
+  await expect(page.getByText('The accounting product is not active for this company, so this series cannot be changed. Switch record kind to view a series whose product is active.')).toBeVisible();
+  await expect(page.getByLabel('Prefix')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Save numbering policy' })).toHaveCount(0);
+  const companyBAccounts = policyTable.getByRole('row').filter({
+    has: page.getByRole('rowheader', { name: 'Accounts', exact: true }),
+  });
+  await expect(companyBAccounts).toContainText('A100');
+  await expect(companyBAccounts).toContainText('A131');
+  await expect(companyBAccounts).not.toContainText('GL');
+
+  // An entitled series is editable and loads B's own values, not A's GL series.
+  await page.getByLabel('Record kind').selectOption('employee');
+  await expect(page.getByLabel('Prefix')).toHaveValue('');
+  await expect(page.getByLabel('Starting number')).toHaveValue('5000');
+  await expect(page.getByText('Current saved next code: 5002')).toBeVisible();
+
+  await useActor(page, ACTOR.owner);
+  await openTab(page, 'Numbering');
+  await expect(page.getByLabel('Record kind')).toHaveValue('account');
+  await expect(page.getByLabel('Prefix')).toHaveValue('GL');
+  await expect(page.getByLabel('Starting number')).toHaveValue('700');
+  await expect(page.getByText('Current saved next code: GL0860')).toBeVisible();
   errors.assertClean();
 });
 

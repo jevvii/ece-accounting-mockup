@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "blocked",
-  "activeTaskId": "ECE12",
+  "activeTaskId": "PAGES02",
   "lastCompletedTaskId": "PAGES01",
   "lastVerifiedTaskId": "PAGES01",
   "completedTasks": [
@@ -181,9 +181,9 @@
       "completedAt": "2026-11-01T09:41:47.372698+00:00"
     }
   ],
-  "nextAction": "Follow docs/GITHUB-PAGES.md: publish the contents of mockup/ as a standalone repository, enable Settings > Pages > GitHub Actions, then run Deploy ECE Accounting mockup on main. Observe the full verify result before hosting acceptance; ECE12 browser/benchmark evidence remains pending. Do not reset user data.",
+  "nextAction": "Push the prepared fix commit on main to origin, then inspect Deploy ECE Accounting mockup. GitHub must run all 42 browser tests and finish Pages deployment. Local typecheck/169 domain tests/build pass; local browser startup and remote GitHub DNS are blocked here. Keep benchmark/hosted checks separate.",
   "workIntent": {
-    "summary": "PAGES01 preparation complete: relative Vite asset base, self-contained accounting oracle fixture, checked Pages workflow, ignore rules and deployment guide. Current typecheck/169 domain tests/build and static workflow/asset checks pass. No GitHub repo or deployment was performed; remote workflow/browser acceptance and ECE12 benchmark remain pending.",
+    "summary": "PAGES02 source edits complete: corrected two stale browser-test expectations and the subsequent stale monthly CSV filename. Exact invoice/journal targets and Company B inactive-accounting restrictions are now asserted explicitly. No application behavior or workflow gates changed. Current browser pass/deployment remains unobserved.",
     "files": []
   },
   "workingFiles": [],
@@ -199,6 +199,9 @@
     },
     {
       "summary": "Non-fatal build chunk warning persists (>500 kB). Legacy clearing records lacking recoverable source/audit evidence retain exact-journal fallback rather than an invented target ID."
+    },
+    {
+      "summary": "PAGES02 fixes are locally prepared but not browser-verified: local Playwright webServer startup blocked; GitHub cannot be reached due DNS restriction. User must push/rerun current source in its permitted environment."
     }
   ],
   "processes": [
@@ -213,6 +216,9 @@
     },
     {
       "summary": "PAGES01 workflow expects mockup contents at repository root, Node 24 and main branch; no personal token required by workflow. GitHub runs browser checks before deployment. No local Git repo was initialized or remote configured."
+    },
+    {
+      "summary": "PAGES02: standalone mockup Git repository now exists on main (initial commit 58d77fd), origin https://github.com/jevvii/ece-accounting-mockup.git. GitHub DNS is blocked here; gh auth status also reports invalid credentials. No remote write or deployment occurred."
     }
   ],
   "verification": [
@@ -290,8 +296,40 @@
       "sourceFingerprint": "3df8b5eb6d304f69813135f319d83fb86f5a98b11e4b211bbf473565b72b5f30",
       "artifact": "artifacts/logs/pages-preparation-results.json",
       "summary": "TypeScript, 24 files / 169 tests, build passed. YAML checks and repository-relative built assets passed. This is preparation acceptance only, not full verify or deployment acceptance."
+    },
+    {
+      "taskId": "PAGES02",
+      "command": "npm run verify",
+      "exitCode": 1,
+      "capturedAt": "2026-11-01T10:26:42.011417+00:00",
+      "sourceFingerprint": "19ddf37bfc571b79c483e0da3b1329ccc73a8ccb207df269dc3f1d280b76a265",
+      "artifact": "artifacts/logs/pages02-verify.txt",
+      "summary": "Strict TypeScript passed, 24 Vitest files / 169 tests passed, build passed (160 modules; existing chunk warning). Overall exit 1 at local Playwright webServer startup, before executing browser cases."
+    },
+    {
+      "taskId": "PAGES02",
+      "command": "Focused Playwright: Five-Book and applies the master",
+      "exitCode": 1,
+      "capturedAt": "2026-11-01T10:26:42.011417+00:00",
+      "artifact": "artifacts/logs/pages02-before.txt",
+      "summary": "Before-edit reproduction attempt blocked before browser startup. The original two assertion failures are evidenced by owner-provided GitHub Actions output (40/42 passed), not a local reproduction."
+    },
+    {
+      "taskId": "PAGES02",
+      "command": "git diff --check",
+      "exitCode": 0,
+      "capturedAt": "2026-11-01T10:26:42.011417+00:00",
+      "sourceFingerprint": "19ddf37bfc571b79c483e0da3b1329ccc73a8ccb207df269dc3f1d280b76a265",
+      "summary": "No whitespace errors in the reviewed fix."
+    },
+    {
+      "taskId": "PAGES02",
+      "command": "git ls-remote origin refs/heads/main",
+      "exitCode": 128,
+      "capturedAt": "2026-11-01T10:26:42.011417+00:00",
+      "summary": "Could not resolve host github.com; remote push/CI observation unavailable in this sandbox."
     }
   ],
-  "sourceFingerprint": "3df8b5eb6d304f69813135f319d83fb86f5a98b11e4b211bbf473565b72b5f30",
-  "updatedAt": "2026-11-01T09:41:47.546Z"
+  "sourceFingerprint": "19ddf37bfc571b79c483e0da3b1329ccc73a8ccb207df269dc3f1d280b76a265",
+  "updatedAt": "2026-11-01T10:26:42.272Z"
 }
