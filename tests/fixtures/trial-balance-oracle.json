@@ -1,0 +1,405 @@
+{
+  "fixtureSchemaVersion": 1,
+  "name": "ECE Accounting source-book Trial Balance oracle",
+  "notApplicationSnapshot": true,
+  "currency": "PHP",
+  "moneyUnit": "integer_centavo",
+  "policy": "Synthetic zero tax; direct-bank receipt/payment; independent six-journal fixture, not the complete navigation seed.",
+  "scope": {
+    "mode": "as_of",
+    "toDate": "2026-10-31",
+    "workspaceId": "fixture-company-a"
+  },
+  "books": [
+    {
+      "key": "sales",
+      "label": "Sales Report"
+    },
+    {
+      "key": "collections",
+      "label": "Collections"
+    },
+    {
+      "key": "purchases",
+      "label": "Purchases"
+    },
+    {
+      "key": "cash_disbursements",
+      "label": "Cash Disbursements"
+    },
+    {
+      "key": "journals",
+      "label": "Journals"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "bank",
+      "code": "A100",
+      "name": "Bank",
+      "type": "asset"
+    },
+    {
+      "id": "ar",
+      "code": "A101",
+      "name": "Accounts receivable",
+      "type": "asset"
+    },
+    {
+      "id": "expense",
+      "code": "A102",
+      "name": "Operating expense",
+      "type": "expense"
+    },
+    {
+      "id": "ap",
+      "code": "A103",
+      "name": "Accounts payable",
+      "type": "liability"
+    },
+    {
+      "id": "revenue",
+      "code": "A104",
+      "name": "Sales revenue",
+      "type": "revenue"
+    },
+    {
+      "id": "equity",
+      "code": "A105",
+      "name": "Opening equity",
+      "type": "equity"
+    }
+  ],
+  "postedJournalInputs": [
+    {
+      "id": "fixture-opening",
+      "workspaceId": "fixture-company-a",
+      "postingDate": "2026-01-01",
+      "sourceType": "opening",
+      "expectedBook": "journals",
+      "lines": [
+        {
+          "accountId": "bank",
+          "debitCentavos": 1000000,
+          "creditCentavos": 0
+        },
+        {
+          "accountId": "equity",
+          "debitCentavos": 0,
+          "creditCentavos": 1000000
+        }
+      ]
+    },
+    {
+      "id": "fixture-invoice",
+      "workspaceId": "fixture-company-a",
+      "postingDate": "2026-10-05",
+      "sourceType": "invoice",
+      "expectedBook": "sales",
+      "lines": [
+        {
+          "accountId": "ar",
+          "debitCentavos": 100000,
+          "creditCentavos": 0
+        },
+        {
+          "accountId": "revenue",
+          "debitCentavos": 0,
+          "creditCentavos": 100000
+        }
+      ]
+    },
+    {
+      "id": "fixture-receipt",
+      "workspaceId": "fixture-company-a",
+      "postingDate": "2026-10-06",
+      "sourceType": "customer_receipt",
+      "expectedBook": "collections",
+      "lines": [
+        {
+          "accountId": "bank",
+          "debitCentavos": 40000,
+          "creditCentavos": 0
+        },
+        {
+          "accountId": "ar",
+          "debitCentavos": 0,
+          "creditCentavos": 40000
+        }
+      ]
+    },
+    {
+      "id": "fixture-bill",
+      "workspaceId": "fixture-company-a",
+      "postingDate": "2026-10-07",
+      "sourceType": "bill",
+      "expectedBook": "purchases",
+      "lines": [
+        {
+          "accountId": "expense",
+          "debitCentavos": 50000,
+          "creditCentavos": 0
+        },
+        {
+          "accountId": "ap",
+          "debitCentavos": 0,
+          "creditCentavos": 50000
+        }
+      ]
+    },
+    {
+      "id": "fixture-payment",
+      "workspaceId": "fixture-company-a",
+      "postingDate": "2026-10-08",
+      "sourceType": "payment",
+      "expectedBook": "cash_disbursements",
+      "lines": [
+        {
+          "accountId": "ap",
+          "debitCentavos": 50000,
+          "creditCentavos": 0
+        },
+        {
+          "accountId": "bank",
+          "debitCentavos": 0,
+          "creditCentavos": 50000
+        }
+      ]
+    },
+    {
+      "id": "fixture-adjustment",
+      "workspaceId": "fixture-company-a",
+      "postingDate": "2026-10-09",
+      "sourceType": "journal_draft",
+      "expectedBook": "journals",
+      "lines": [
+        {
+          "accountId": "expense",
+          "debitCentavos": 10000,
+          "creditCentavos": 0
+        },
+        {
+          "accountId": "bank",
+          "debitCentavos": 0,
+          "creditCentavos": 10000
+        }
+      ]
+    }
+  ],
+  "expectedRows": [
+    {
+      "accountId": "bank",
+      "code": "A100",
+      "books": {
+        "sales": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "collections": {
+          "debitCentavos": 40000,
+          "creditCentavos": 0
+        },
+        "purchases": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "cash_disbursements": {
+          "debitCentavos": 0,
+          "creditCentavos": 50000
+        },
+        "journals": {
+          "debitCentavos": 1000000,
+          "creditCentavos": 10000
+        }
+      },
+      "netBalance": {
+        "debitCentavos": 980000,
+        "creditCentavos": 0
+      }
+    },
+    {
+      "accountId": "ar",
+      "code": "A101",
+      "books": {
+        "sales": {
+          "debitCentavos": 100000,
+          "creditCentavos": 0
+        },
+        "collections": {
+          "debitCentavos": 0,
+          "creditCentavos": 40000
+        },
+        "purchases": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "cash_disbursements": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "journals": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        }
+      },
+      "netBalance": {
+        "debitCentavos": 60000,
+        "creditCentavos": 0
+      }
+    },
+    {
+      "accountId": "expense",
+      "code": "A102",
+      "books": {
+        "sales": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "collections": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "purchases": {
+          "debitCentavos": 50000,
+          "creditCentavos": 0
+        },
+        "cash_disbursements": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "journals": {
+          "debitCentavos": 10000,
+          "creditCentavos": 0
+        }
+      },
+      "netBalance": {
+        "debitCentavos": 60000,
+        "creditCentavos": 0
+      }
+    },
+    {
+      "accountId": "ap",
+      "code": "A103",
+      "books": {
+        "sales": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "collections": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "purchases": {
+          "debitCentavos": 0,
+          "creditCentavos": 50000
+        },
+        "cash_disbursements": {
+          "debitCentavos": 50000,
+          "creditCentavos": 0
+        },
+        "journals": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        }
+      },
+      "netBalance": {
+        "debitCentavos": 0,
+        "creditCentavos": 0
+      }
+    },
+    {
+      "accountId": "revenue",
+      "code": "A104",
+      "books": {
+        "sales": {
+          "debitCentavos": 0,
+          "creditCentavos": 100000
+        },
+        "collections": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "purchases": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "cash_disbursements": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "journals": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        }
+      },
+      "netBalance": {
+        "debitCentavos": 0,
+        "creditCentavos": 100000
+      }
+    },
+    {
+      "accountId": "equity",
+      "code": "A105",
+      "books": {
+        "sales": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "collections": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "purchases": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "cash_disbursements": {
+          "debitCentavos": 0,
+          "creditCentavos": 0
+        },
+        "journals": {
+          "debitCentavos": 0,
+          "creditCentavos": 1000000
+        }
+      },
+      "netBalance": {
+        "debitCentavos": 0,
+        "creditCentavos": 1000000
+      }
+    }
+  ],
+  "expectedBookTotals": {
+    "sales": {
+      "debitCentavos": 100000,
+      "creditCentavos": 100000
+    },
+    "collections": {
+      "debitCentavos": 40000,
+      "creditCentavos": 40000
+    },
+    "purchases": {
+      "debitCentavos": 50000,
+      "creditCentavos": 50000
+    },
+    "cash_disbursements": {
+      "debitCentavos": 50000,
+      "creditCentavos": 50000
+    },
+    "journals": {
+      "debitCentavos": 1010000,
+      "creditCentavos": 1010000
+    }
+  },
+  "expectedGrossTotals": {
+    "debitCentavos": 1250000,
+    "creditCentavos": 1250000
+  },
+  "expectedNetBalanceTotals": {
+    "debitCentavos": 1100000,
+    "creditCentavos": 1100000
+  },
+  "expectedIncludedJournalCount": 6,
+  "requiredVisibleZeroNetAccounts": [
+    "ap"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "phase": "ECE",
+  "title": "ECE Accounting Scope Amendment — Orchestration & File Ownership Registry",
+  "coordinator": {
+    "agent": "Argon 4",
+    "conversationId": "9b2bdc1d-e1f4-4257-81b4-88196e5837c8",
+    "role": "Coordinator & Shared-Seam Integrator"
+  },
+  "baseline": {
+    "priorTaskId": "R09",
+    "sourceFingerprint": "02e88aa188cbde32c9d9306319e4c9f90bc583ba7e1952bfa6803c44abb5fbcc",
+    "fileCount": 93,
+    "verifiedAt": "2026-11-01T06:54:02Z"
+  },
+  "modelResolution": {
+    "requestedWorkerModel": "Gemini 3.8 Flash High",
+    "discoveredCliModelId": "gemini-3.8-flash-high",
+    "discoveredCliModelLabel": "Gemini 3.8 Flash (High)",
+    "runtimeSubagentTool": "define_subagent + invoke_subagent",
+    "runtimeSubagentModelParam": "flash",
+    "maxConcurrentWorkers": 3
+  },
+  "customAgents": {
+    "ece-ledger-source": {
+      "model": "gemini-3.8-flash-high (invoke_subagent Model: flash)",
+      "tasks": ["ECE02", "ECE03"],
+      "ownedFiles": [
+        "src/domain/schema.ts",
+        "src/domain/ledger.ts",
+        "src/domain/migration.ts",
+        "src/domain/cash.ts",
+        "src/domain/queries.ts",
+        "tests/domain/ece-trial-balance-oracle.test.ts",
+        "tests/domain/reports.test.ts"
+      ]
+    },
+    "ece-demo-refresh": {
+      "model": "gemini-3.8-flash-high (invoke_subagent Model: flash)",
+      "tasks": ["ECE04"],
+      "ownedFiles": [
+        "src/fixtures/seed.ts",
+        "src/adapters/storage.ts",
+        "scripts/seed-benchmark.ts",
+        "tests/domain/harness.ts",
+        "tests/domain/persistence.test.ts",
+        "tests/domain/numbering.test.ts",
+        "tests/domain/ece-demo-refresh.test.ts"
+      ]
+    },
+    "ece-brand-report-ui": {
+      "model": "gemini-3.8-flash-high (invoke_subagent Model: flash)",
+      "tasks": ["ECE05", "ECE06"],
+      "ownedFiles": [
+        "index.html",
+        "package.json",
+        "package-lock.json",
+        "README.md",
+        "AGENTS.md",
+        "CLAUDE.md",
+        "docs/DESIGN.md",
+        "scripts/checkpoint.mjs",
+        "src/styles.css",
+        "src/domain/archive.ts",
+        "src/domain/commands.ts",
+        "src/adapters/archive.ts",
+        "src/app/router.ts",
+        "src/app/App.tsx",
+        "src/app/useApp.tsx",
+        "src/app/screens/ReportsScreen.tsx",
+        "src/app/screens/AdminScreen.tsx",
+        "src/app/screens/AssetsScreen.tsx",
+        "src/app/screens/CashScreen.tsx",
+        "src/app/screens/InventoryScreen.tsx",
+        "src/app/screens/OtherScreen.tsx",
+        "src/app/screens/PayrollScreen.tsx",
+        "tests/app/router.test.ts"
+      ]
+    },
+    "ece-independent-qa": {
+      "model": "gemini-3.8-flash-high (invoke_subagent Model: flash)",
+      "tasks": ["ECE08"],
+      "ownedFiles": [
+        "tests/e2e/navigation.spec.ts",
+        "tests/e2e/admin.spec.ts",
+        "tests/e2e/inventory-assets.spec.ts",
+        "tests/e2e/keyboard.spec.ts",
+        "tests/e2e/cash.spec.ts",
+        "tests/e2e/ece-amendment.spec.ts",
+        "artifacts/ece/"
+      ]
+    }
+  },
+  "frozenContracts": {
+    "contractVersion": "ece-v1",
+    "sourceBooks": [
+      { "key": "sales", "label": "Sales Report" },
+      { "key": "collections", "label": "Collections" },
+      { "key": "purchases", "label": "Purchases" },
+      { "key": "cash_disbursements", "label": "Cash Disbursements" },
+      { "key": "journals", "label": "Journals" }
+    ],
+    "journalProvenance": {
+      "version": 1,
+      "fields": [
+        "book: 'sales' | 'collections' | 'purchases' | 'cash_disbursements' | 'journals'",
+        "originSourceType: string",
+        "originSourceId: string",
+        "originJournalId?: string | null",
+        "clearingTargetType?: 'customer_receipt' | 'payment' | null",
+        "clearingTargetId?: string | null",
+        "provisional?: boolean",
+        "exceptionReason?: string | null"
+      ]
+    },
+    "demoFixtureVersion": "ece-accounting-demo-v1"
+  },
+  "activeSessions": []
+}
